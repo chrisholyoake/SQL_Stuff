@@ -80,8 +80,6 @@ SHOW CREATE TABLE address;
         INNER JOIN address on staff.address_id = address.address_id
     
 -- 6b. Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment.
-SELECT * FROM payment;
-SELECT * FROM staff;
 
 SELECT staff.staff_id, SUM(payment.amount)
 	FROM staff
@@ -90,8 +88,6 @@ SELECT staff.staff_id, SUM(payment.amount)
     GROUP BY staff.staff_id;
     
 -- 6c. List each film and the number of actors who are listed for that film. Use tables film_actor and film. Use inner join.
-SELECT * FROM film; -- film_id, title
-SELECT * FROM film_actor; -- actor_id, film_id
 
 SELECT film.title, count(film_actor.actor_id)
 FROM film
@@ -99,7 +95,6 @@ INNER JOIN film_actor ON film.film_id = film_actor.film_id
 GROUP BY film.title;
 
 -- 6d. How many copies of the film Hunchback Impossible exist in the inventory system?
-SELECT * FROM film;
 
 SELECT f.title, COUNT(i.inventory_id) AS 'number_of_copies'
 	FROM inventory i
@@ -108,8 +103,6 @@ SELECT f.title, COUNT(i.inventory_id) AS 'number_of_copies'
     GROUP BY i.film_id;
 
 -- 6e. Using the tables payment and customer and the JOIN command, list the total paid by each customer. List the customers alphabetically by last name:
-	SELECT * FROM payment;
-    SELECT * FROM customer;
     
     SELECT c.first_name,c.last_name, SUM(p.amount) AS 'Total Amount Paid'
 		FROM customer c
@@ -118,8 +111,6 @@ SELECT f.title, COUNT(i.inventory_id) AS 'number_of_copies'
         ORDER BY last_name ASC;
 
 -- 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters K and Q have also soared in popularity. Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
-SELECT * FROM film;
-SELECT * FROM language;
 
 SELECT title FROM film
 	WHERE language_id = 1 AND title IN(
@@ -129,8 +120,6 @@ SELECT title FROM film
         OR title LIKE 'Q%'); 
 
 -- 7b. Use subqueries to display all actors who appear in the film Alone Trip.
-SELECT * FROM film_actor;
-SELECT * FROM actor;
 
 -- gets actor IDs in that movie
 SELECT actor_id FROM film_actor
@@ -146,11 +135,6 @@ SELECT first_name,last_name FROM actor
 		WHERE title = 'Alone Trip'));
 
 -- 7c. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
-SELECT * FROM customer; -- email, address_id
-SELECT * FROM address; -- address_id, city_id
-SELECT * FROM city; -- city_id, country_id
-SELECT * FROM country; -- country_id, country 
-
 SELECT first_name, last_name,email FROM customer
 WHERE address_id IN (
 	SELECT address_id FROM address -- gets addresses
@@ -170,10 +154,6 @@ WHERE co.country = 'Canada';
 
 
 -- 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as family films.
-SELECT * FROM film_category;
-SELECT * FROM film;
-SELECT * FROM category;
-
 SELECT title FROM film 
 WHERE film_id IN(
 	SELECT film_id FROM film_category
@@ -182,9 +162,6 @@ WHERE film_id IN(
 		WHERE name = 'family'));
 
 -- 7e. Display the most frequently rented movies in descending order.
-SELECT * FROM rental;
-SELECT * FROM inventory;
-SELECT * FROM film;
 
 SELECT inventory_id, COUNT(*) as 'Number of Times Rented'
 FROM rental
@@ -194,13 +171,7 @@ SELECT f.title, f.film_id, inventory_id
 	FROM film f
     INNER JOIN inventory i ON i.film_id = f.film_id;
 
-** NOT WORKING **
-
 -- 7f. Write a query to display how much business, in dollars, each store brought in.
-SELECT * FROM store; -- store id
-SELECT * FROM payment; -- rental id, amount
-SELECT * FROM rental; -- rental_id, staff_id
-SELECT * FROM staff; -- store_id, staff_id 
 
 SELECT s.store_id, SUM(p.amount) AS 'Revenue' 
 	FROM payment p
@@ -208,10 +179,6 @@ SELECT s.store_id, SUM(p.amount) AS 'Revenue'
 	GROUP BY p.staff_id;
 
 -- 7g. Write a query to display for each store its store ID, city, and country.
-SELECT * FROM store; -- store id, address_id
-SELECT * FROM address; -- address_id, city_id
-SELECT * FROM city; -- city_id, country_id
-SELECT * FROM country; -- country_id, country 
 
 SELECT s.store_id, c.city, co.country
 	FROM store s
@@ -220,11 +187,6 @@ SELECT s.store_id, c.city, co.country
     INNER JOIN country co ON c.country_id = co.country_id;
 
 -- 7h. List the top five genres in gross revenue in descending order. (Hint: you may need to use the following tables: category, film_category, inventory, payment, and rental.)
-SELECT * FROM category -- category id
-SELECT * FROM film_category -- category_id, film id
-SELECT * FROM inventory -- film id, inventory_id
-SELECT * FROM rental -- rental_id, inventory id, customer id, staff id
-SELECT * FROM payment -- rental_id, amount
 
 SELECT c.name, SUM(p.amount) as 'Revenue'
 	FROM payment p
